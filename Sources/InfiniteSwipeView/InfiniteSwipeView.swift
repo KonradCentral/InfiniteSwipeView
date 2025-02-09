@@ -13,6 +13,7 @@ public enum Orientation {
     case vertical
 }
 
+@available(macOS 11, *)
 public struct InfiniteSwipeView<Content:View>: View {
     @Binding var index: Int
     var orientation: Orientation
@@ -55,7 +56,9 @@ public struct InfiniteSwipeView<Content:View>: View {
                         .contentShape(Rectangle())
                         .gesture(isLocked ? DragGesture() : nil)
                 }
+                #if os(iOS)
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                #endif
                 .coordinateSpace(name: "scroll")
                 .onChange(of: internalIndex) { newValue in
                     if [1, 3].contains(newValue) {
@@ -74,7 +77,9 @@ public struct InfiniteSwipeView<Content:View>: View {
                 .frame(width: proxy.size.height, height: proxy.size.width)
                 .rotationEffect(.degrees(90), anchor: .topLeading)
                 .offset(x: proxy.size.width)
+                #if os(iOS)
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                #endif
                 .coordinateSpace(name: "scroll")
                 .onChange(of: internalIndex) { newValue in
                     if [1, 3].contains(newValue) {
@@ -86,6 +91,7 @@ public struct InfiniteSwipeView<Content:View>: View {
     }
 }
 
+@available(macOS 11, *)
 struct InfiniteSwipeView_Previews: PreviewProvider {
     static var previews: some View {
         @State var index = 0
